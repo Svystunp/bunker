@@ -30,6 +30,21 @@ body { margin: 0; padding: 0; }
  
 <script>
 var map = L.map('map').setView([58, 60], 4);
+
+
+		
+		map.dragging.disable();
+		map.touchZoom.disable();
+		map.doubleClickZoom.disable();
+		map.scrollWheelZoom.disable();
+		
+var bounds = [
+    [42.983217980469,  15.58367495674107],
+    [73.09089383408825, 123.68914370674108]
+    ];
+
+
+map.fitBounds(bounds);
 //Declarign variables
 var bunkers = [
 [57.28903081606885, 87.04838003643337],
@@ -41,7 +56,7 @@ var bunkers = [
 
 var Ukraine_cities = [[ 49.8446292072748, 24.03147697448731], [49.99162134064152, 36.23120907540986],[46.4741921028687,  30.725519657135013], [50.46683017224245, 30.510932207107547]];
 var popup = L.popup()
-					.setContent("Ви маєте змогу грати в цю гру завдяки Збройним силам України, які боронять нашу неньку від орди. Їм дуже потрібна Ваша допомога. Задонатьте збройним силам України. Пам'ятайте - немає маленьких донатів. Це можна зробити через <a href = 'https://bank.gov.ua/ua/news/all/natsionalniy-bank-vidkriv-spetsrahunok-dlya-zboru-koshtiv-na-potrebi-armiyi'>Національний банк України</a>, або через будь-яку волонтерську організацію на Ваш вибір. Давайте бути свідомими Українцями.");
+					.setContent("Ви маєте змогу грати в цю гру завдяки Збройним силам України, які боронять нашу неньку від орди. Їм дуже потрібна Ваша допомога. Задонатьте збройним силам України. Пам'ятайте - немає маленьких донатів. Це можна зробити через <a href = 'https://bank.gov.ua/ua/news/all/natsionalniy-bank-vidkriv-spetsrahunok-dlya-zboru-koshtiv-na-potrebi-armiyi'>Національний банк України</a>, або через будь-яку волонтерську організацію на Ваш вибір. Будьте свідомими Українцями.");
 var destroyed_bunkers = [];
 var cities = [];
 var destroyed_sities = [];
