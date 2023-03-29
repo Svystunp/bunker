@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Bunkerniy v0.1</title>
+<title>Bunkerniy v0.3</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
      integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
      crossorigin=""/>
@@ -12,217 +12,46 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-extra-markers/1.2.1/css/leaflet.extra-markers.min.css" integrity="sha512-wurszDyO1nj6ESdfrXb9h1hmoHMu3sQ3iXgKcu/p81lT+KaPGkta9NIPX7k6XXGgVYpcRHcc8AA4UIeQ7Ax/Cw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-extra-markers/1.2.1/js/leaflet.extra-markers.js" integrity="sha512-Jgp0ME6T7Hwe5HT+dHl8CFpKhtNbjgwyzLKq4/OGR2s8cfR3bORtDTTePvI8MO3jtOI47VTQOAL9VjF0sVNBhA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src = "https://cdn.jsdelivr.net/npm/Leaflet-MovingMaker@0.0.1/MovingMarker.min.js"></script>
-<style>
-html{
-	
-}
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="style.css"/>
 
-.leaflet-interactive {
-  cursor: url(./img/mallet.png),auto; !important;
-}
-
-</style>
 </head>
 <body>
 <div id="map"></div>
- 
-<script>
-var map = L.map('map').setView([58, 60], 4);
+<div class="modal" tabindex="-1" role="dialog" id = "start_modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id = "modalHeader">Гра "Бункерний"</h5>
 
+        </div>
+        <div class="modal-body" id = "modalBody">
+            <p>Суть гри - клікнути на путіна, поки він не встиг запустити ракету в сторону України.</p>
+            <form id="hardness" onsubmit="return false"></form>
+            <div class="form-group">
+				<fieldset>
+					<legend>Оберіть рівень складності:</legend> 
 
-		
-		map.dragging.disable();
-		map.touchZoom.disable();
-		map.doubleClickZoom.disable();
-		map.scrollWheelZoom.disable();
-		
-var bounds = [
-    [42.983217980469,  15.58367495674107],
-    [73.09089383408825, 123.68914370674108]
-    ];
+					 <input type="radio" name="hardness" value=1500 checked>Легкий<br>
+					 <input type="radio" name="hardness" value=1000 checked>Середній<br>
+                     <input type="radio" name="hardness" value=500 checked>Важкий<br>
+                     <input type="radio" name="hardness" value=250 checked>Прфоесіонал<br>
 
-
-map.fitBounds(bounds);
-//Declarign variables
-var bunkers = [
-[57.28903081606885, 87.04838003643337],
-[67.108168967632636, 92.881319106426915],
-[64.149312115052453, 60.127122790309222],
-[57.57884798890207, 64.0755738530741],
-[57.17788175696055, 116.57085766742468],
-[66.86073136270376, 115.336892979791855]];
-
-var Ukraine_cities = [[ 49.8446292072748, 24.03147697448731], [49.99162134064152, 36.23120907540986],[46.4741921028687,  30.725519657135013], [50.46683017224245, 30.510932207107547]];
-var popup = L.popup()
-					.setContent("Ви маєте змогу грати в цю гру завдяки Збройним силам України, які боронять нашу неньку від орди. Їм дуже потрібна Ваша допомога. Задонатьте збройним силам України. Пам'ятайте - немає маленьких донатів. Це можна зробити через <a href = 'https://bank.gov.ua/ua/news/all/natsionalniy-bank-vidkriv-spetsrahunok-dlya-zboru-koshtiv-na-potrebi-armiyi'>Національний банк України</a>, або через будь-яку волонтерську організацію на Ваш вибір. Будьте свідомими Українцями.");
-var destroyed_bunkers = [];
-var cities = [];
-var destroyed_sities = [];
-var attacking_bunker_latlng = '';
-var last_bunker_latlng;
-var attack = false;
-var is_clicked = false;
-var last_bunker = false;
-var click = false;
-var hits = 0;
-
-var bunker_points = L.layerGroup().addTo(map);
-var bunker_attack = L.layerGroup().addTo(map);
-var bunker_destroyed = L.layerGroup().addTo(map);
-var bunker_icon = L.icon({
-    iconUrl: 'img/bunker.png',
-    iconSize:     [105, 105], // size of the icon
-    iconAnchor:   [52, 52]
-});
-var bunker_attack_icon = L.icon({
-    iconUrl: 'img/bunker_attack.png',
-    iconSize:     [176, 105], // size of the icon
-    iconAnchor:   [88, 52]
-});
-var bunker_destroyed_icon = L.icon({
-    iconUrl: 'img/bunker_damaged.png',
-    iconSize:     [105, 105], // size of the icon
-    iconAnchor:   [52, 52]
-});
-var missle_icon = L.icon({
-    iconUrl: 'img/missle.png',
-    iconSize:     [123, 17], // size of the icon
-    iconAnchor:   [61, 8]
-});
-var putin_icon = L.icon({
-    iconUrl: 'img/huilo.png',
-    iconSize:     [60, 57], // size of the icon
-    iconAnchor:   [30, 29]
-});
-var rip_icon = L.icon({
-    iconUrl: 'img/rip.png',
-    iconSize:     [70, 88], // size of the icon
-    iconAnchor:   [35, 44]
-});
-var crack_icon = L.icon({
-    iconUrl: 'img/crack.png',
-    iconSize:     [30, 30], // size of the icon
-    iconAnchor:   [15, 15]
-});
-//loading icons
-
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 22,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-var addBunkers = function(){
-bunkers.forEach((bunker) => {
-	L.marker(bunker, {icon: bunker_icon}).addTo(bunker_points).on('click', function(e){miss(e);});;
-})
-destroyed_bunkers.forEach((bunker) => {
-	L.marker(bunker, {icon: bunker_destroyed_icon}).addTo(bunker_destroyed);
-})
-}
-addBunkers();
-var putin_attack = function(){
-	if (bunkers.length > 0 && hits < 4){
-		attack = true;
-		var bunker = Math.floor(Math.random()*bunkers.length);
-		var attacking = L.marker(bunkers[bunker], {icon: bunker_attack_icon}).addTo(bunker_attack).on('click', function(e){hit(e);});
-		attacking_bunker_latlng = attacking.getLatLng();
-		setTimeout(function(){
-			if (attack == true){
-			attack = false;
-			console.log("miss");
-			hits++;
-			
-			var missle = L.Marker.movingMarker([[attacking_bunker_latlng.lat, attacking_bunker_latlng.lng],[50.44572674279861, 30.52847385406494]],
-						[2000], {icon: missle_icon}).addTo(map);
-
-			missle.start();
-			missle.on('end', function() {
-				missle.remove();
-				L.marker(Ukraine_cities[hits-1], {icon: crack_icon}).addTo(map);
+				</fieldset>
 				
-			});
-				  bunker_points.clearLayers();
-				  bunker_destroyed.clearLayers();
-				  bunker_attack.clearLayers();
-				  addBunkers(); 
-			}
-		
-		}, 2000);
-		setTimeout(function(){
-			putin_attack();
-		}, (Math.floor(Math.random() * (7000 - 3000 + 1) + 3000)));
-	} else if (hits < 4){
-		var huilo = L.Marker.movingMarker([[last_bunker_latlng.lat, last_bunker_latlng.lng],[43.72722404829262, 36.36619674810896]],
-						[3000], {icon: putin_icon}).addTo(map);
-
-			huilo.start();
-			huilo.on('end', function() {
-				huilo.remove();
-				var marker = L.marker([43.72722404829262, 36.36619674810896], {icon: rip_icon}).addTo(map);
-				
-
-			popup.setLatLng([50.46683017224245, 30.510932207107547]).openOn(map);
-			});
-		
-	} else {
-		popup.setLatLng([50.46683017224245, 30.510932207107547]).openOn(map);
-	}
-}
-
-var miss = function(e){
-	if (attack){
-			attack = false;
-			console.log("miss");
-			hits++;
+			</div>
 			
-			var missle = L.Marker.movingMarker([[attacking_bunker_latlng.lat, attacking_bunker_latlng.lng],[50.44572674279861, 30.52847385406494]],
-						[2000], {icon: missle_icon}).addTo(map);
 
-			missle.start();
-			missle.on('end', function() {
-				missle.remove();
-				L.marker(Ukraine_cities[hits-1], {icon: crack_icon}).addTo(map);
-				
-			});
-				  bunker_points.clearLayers();
-				  bunker_destroyed.clearLayers();
-				  bunker_attack.clearLayers();
-				  addBunkers(); 
-			
-		}
-	}
+			<button id="filterBtn" class="btn btn-warning btn-block" type="submit" onClick = "startGame()">Почати гру</button>
+		</form>
+        </div>
 
+      </div>
+    </div>
+  </div>
 
-var hit = function(e){
-	var found;
-	var index = -1;
-	for(var k = 0; k < bunkers.length; k++){
-		if(bunkers[k][0] == e.latlng.lat && bunkers[k][1] == e.latlng.lng){
-			found = true;
-			index = k;
-		}
-	}
-	if (index !== -1) {
-	  //array.splice(index, 1);
-	  last_bunker_latlng = attacking_bunker_latlng;
-	  destroyed_bunkers.push(bunkers[index]);
-	  bunkers.splice(index, 1);
-	  bunker_attack.clearLayers();
-	  bunker_points.clearLayers();
-	  bunker_destroyed.clearLayers();
-	  attack = false;
-	  addBunkers();
-		
-	} else {
-		
-	}
-	
-}
-setTimeout(function(){
-	putin_attack();
-}, 2000);
-</script>
  
 </body>
+<script src = "app.js"></script>
 </html>
