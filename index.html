@@ -33,17 +33,24 @@
 				<fieldset>
 					<legend>Оберіть рівень складності:</legend> 
 
-					 <input type="radio" name="hardness" value=1500 checked>Легкий<br>
-					 <input type="radio" name="hardness" value=1000 checked>Середній<br>
-                     <input type="radio" name="hardness" value=500 checked>Важкий<br>
-                     <input type="radio" name="hardness" value=250 checked>Прфоесіонал<br>
+          <div class="cc-selector">
+            <input id="easy" type="radio" name="hardness" value=1500 />
+            <label class="drinkcard-cc easy" for="easy"></label>
+            <input id="medium" type="radio" name="hardness" value=1000 />
+            <label class="drinkcard-cc medium"for="medium"></label>
+            <input id="hard" type="radio" name="hardness" value=500 />
+            <label class="drinkcard-cc hard"for="hard"></label>
+            <input id="extreeme" type="radio" name="hardness" value=250 />
+            <label class="drinkcard-cc extreeme"for="extreeme"></label>
+        </div>		
+
 
 				</fieldset>
 				
 			</div>
-			
+	
 
-			<button id="filterBtn" class="btn btn-warning btn-block" type="submit" onClick = "startGame()">Почати гру</button>
+			<button id="filterBtn" class="btn btn-secondary btn-block" type="submit" onClick = "startGame()">Почати гру</button>
 		</form>
         </div>
 

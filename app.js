@@ -1,11 +1,34 @@
 var start_modal = document.getElementById("start_modal");
+var easy = document.getElementById('easy');
+var medium = document.getElementById('medium');
+var hard = document.getElementById('hard');
+var extreeme = document.getElementById('extreeme');
+var filterBtn = document.getElementById('filterBtn');
 
+easy.addEventListener('click', function(e) {
+	filterBtn.className = 'btn btn-success btn-block';
+	filterBtn.innerHTML = 'Ці руки ніколи не грали';
+})
+medium.addEventListener('click', function(e) {
+	filterBtn.className = 'btn btn-warning btn-block';
+	filterBtn.innerHTML = 'Ведіть сюди ту скотиняку';
+})
+hard.addEventListener('click', function(e) {
+	filterBtn.className = 'btn btn-danger btn-block';
+	filterBtn.innerHTML = 'Астанавітесь';
+})
+extreeme.addEventListener('click', function(e) {
+	filterBtn.className = 'btn btn-dark btn-block';
+	filterBtn.innerHTML = 'Куля в лоб, так куля в лоб';
+})
 
 var startGame = function(){
 	t = document.querySelector('input[name="hardness"]:checked').value;
 
 	start_modal.style.display = 'none';
-	putin_attack(t);
+	setTimeout(function(){
+		putin_attack(t);
+	}, 1000);
 
 }
 
@@ -227,8 +250,3 @@ var hit = function(e){
 	}
 	
 }
-/*
-setTimeout(function(){
-	putin_attack(t);
-}, 2000);
-*/
