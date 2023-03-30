@@ -83,7 +83,7 @@ bunkers = [
 
 
 var Ukraine_cities = [[ 49.8446292072748, 24.03147697448731], [49.99162134064152, 36.23120907540986],[46.4741921028687,  30.725519657135013], [50.46683017224245, 30.510932207107547]];
-var popup = L.popup()
+var popup = L.popup({closeButton: false, closeOnClick: false})
 					.setContent("Ви маєте змогу грати в цю гру завдяки Збройним силам України, які боронять нашу неньку від орди. Їм дуже потрібна Ваша допомога. Задонатьте збройним силам України. Пам'ятайте - немає маленьких донатів. Це можна зробити через <a href = 'https://bank.gov.ua/ua/news/all/natsionalniy-bank-vidkriv-spetsrahunok-dlya-zboru-koshtiv-na-potrebi-armiyi'>Національний банк України</a>, або через будь-яку волонтерську організацію на Ваш вибір. Будьте свідомими Українцями.<br><button id='filterBtn' class='btn btn-warning btn-block' type='submit' onClick = 'resetGame()'>Зіграти ще раз</button>");
 var destroyed_bunkers = [];
 var cities = [];
@@ -182,7 +182,7 @@ var putin_attack = function(t){
 		}, t);
 		setTimeout(function(){
 			putin_attack(t);
-		}, (Math.floor(Math.random() * (7000 - 3000 + 1) + 3000)));
+		}, (Math.floor(Math.random() * (5000 - 2000 + 1) + 2000)));
 	} else if (hits < 4){
 		var huilo = L.Marker.movingMarker([[last_bunker_latlng.lat, last_bunker_latlng.lng],[43.72722404829262, 36.36619674810896]],
 						[3000], {icon: putin_icon}).addTo(map);
@@ -250,3 +250,4 @@ var hit = function(e){
 	}
 	
 }
+
